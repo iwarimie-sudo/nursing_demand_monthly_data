@@ -1,0 +1,60 @@
+---
+title: "Nursing Demand Time Series Dataset"
+author: "Ezekiel Iwarimie"
+date: "2026-09-26"
+output: html_document
+---
+# Nursing Demand Time Series Data
+
+```{r}
+library(readxl)
+
+nursing <- read_excel("nursing_demand_monthly_data.xlsx")
+head(nursing)
+str(nursing)
+
+names(nursing) [2] <- "Month_date"
+names(nursing) [3] <- "Demand CCRN"
+
+names(nursing)
+nrow(nursing)
+
+min(nursing$`Demand CCRN`)
+max(nursing$`Demand CCRN`)
+
+min(nursing$`Demand RN`)
+max(nursing$`Demand RN`)
+
+min(nursing$`Demand RPN`)
+max(nursing$`Demand RPN`)
+```
+
+## Dataset Description
+This dataset has monthly nursing staffing demand data from October 2017 to February 2025, covering 89 months. Each row represents one month and includes data for three nursing categories: Critical Care RN, General RN, and Registered Practical Nurse (RPN). The dataset will be used to practice time series analysis and forecasting.
+
+## Data Dictionary
+| Variable Name | Readable Variable Name | Measurement Units | Allowed Values | Definition | Synonyms | Description |
+|---|---|---|---|---|---|---|
+| Month Index | Month Index | Consecutive Count | Integers 1 to 89 | Month Index is a sequential time-period variable that counts each monthly step in chronological order. | Time Step, Index | Represents 89 consecutive monthly observations starting from 1 (Oct 2017) to 89 (Feb 2025). |
+| Month_date | Month Date | Date (YYYY-MM-DD) | Oct 2017 to Feb 2025 | Month_date identifies the calendar month and year when each observation was recorded. | Date, Calendar Period | Represents the start date of each calendar month corresponding to the recorded staffing demand. |
+| Demand CCRN | Demand Critical Care RN | Staffing Units / Shifts | Numeric values from 88 to 813 | Demand CCRN is a quantitative variable measuring monthly staffing demand for Critical Care Registered Nurses. | Critical Care Demand, ICU RN Demand | Represents total monthly demand/shifts required for specialized Critical Care RNs. |
+| Demand RN | Demand RN | Staffing Units / Shifts | Numeric values from 270 to 984 | Demand RN is a quantitative variable measuring monthly staffing demand for general Registered Nurses. | General RN Demand, RN Staffing | Represents total monthly demand/shifts required for general Registered Nurses. |
+| Demand RPN | Demand RPN | Staffing Units / Shifts | Numeric values from 155 to 826 | Demand RPN is a quantitative variable measuring monthly staffing demand for Registered Practical Nurses. | Practical Nurse Demand, RPN Staffing | Represents total monthly demand/shifts required for Registered Practical Nurses. |
+
+## Data Methodology
+The dataset contains nursing demand observations recorded once per month for 89 consecutive months (October 2017 through February 2025), leading to 89 total observations. Each observation demonstrates the reported staffing demand across three nursing type for a specific month. The dataset was obtained from the file (nursing_demand_monthly_data.xlsx)
+
+## Why This Dataset Interests Me
+I chose this dataset because healthcare staffing is important for operational efficiency and ensuring patients get the care they need. I believe understanding how nursing demand changes over time can help healthcare managers make smarter decisions about hiring, scheduling shifts, assigning nurses, and budgeting.
+This data is useful for looking at trends and patterns over time, such as fluctuations in demand and possible seasonal changes.
+
+```{r}
+rnd_ts <- ts(nursing$`Demand RN`,
+start = c(2017, 10),
+frequency = 12)
+
+plot(rnd_ts,
+     xlab = "Year",
+     ylab = "RN Demand",
+     main = "Monthly RN Demand (Oct 2017 - Feb 2025)")
+```
